@@ -54,6 +54,20 @@
  */
 export function createThaliDescription(thali) {
   // Your code here
+  if (typeof thali !== 'object' || !thali || !Array.isArray(thali)) {
+    return ""
+  }
+
+  const { name, items, price, isVeg } = thali;
+
+
+  name = name.toUpperCase()
+  isVeg = isVeg? "Veg" : "Non-Veg"
+  items = items.join(", ")
+  price = price.isFixed(2)
+
+  return `${name} (${type}) - Items: ${items} - Rs.${price}`
+
 }
 
 export function getThaliStats(thalis) {

@@ -47,16 +47,59 @@
  */
 export function createPaanOrder(basePaan, customizations) {
   // Your code here
+  const isInvalid = (val) => !val || typeof val !== 'object' || Array.isArray(val);
+
+  if (isInvalid(basePaan)) {
+    return {};
+  }
+
+  if (isInvalid(customizations)) {
+    return { ...basePaan };
+  }
+
+  return { ...basePaan, ...customizations };
 }
 
 export function freezeMenu(menu) {
   // Your code here
+  if (typeof menu !== 'object' || !menu || Array.isArray(menu)) {
+    return {}
+  }
+
+  Object.freeze(menu)
+  return menu
 }
 
 export function updatePrices(menu, increase) {
   // Your code here
+  if (typeof menu !== 'object' || !menu || typeof increase !== 'number') {
+    return {}
+  }
+
+  let entries = Object.entries(menu)
+
+  const increaseEntry = entries.map(([item, price]) => {
+    return [item, price + increase]
+  })
+
+  return Object.fromEntries(increaseEntry)
 }
 
 export function mergeDailySpecials(regularMenu, specialsMenu) {
   // Your code here
+  const isObject = (obj) => {
+    return obj !== null && typeof obj === 'object' && !Array.isArray(obj);
+  };
+
+  // 2. Agar dono kachra hain (non-objects), toh turant {} return karo
+  if (!isObject(regularMenu) && !isObject(specialsMenu)) {
+    return {};
+  }
+
+  // 3. Jo valid hai use lo, jo nahi hai use {} maan lo
+  const safeRegular = isObject(regularMenu) ? regularMenu : {};
+  const safeSpecials = isObject(specialsMenu) ? specialsMenu : {};
+
+  // 4. Merge and Return
+  return { ...safeRegular, ...safeSpecials };
 }
